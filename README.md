@@ -1,0 +1,2 @@
+# GameOfLife
+Just for fun
