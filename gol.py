@@ -114,14 +114,40 @@ def countLiveNeigbours(line,cell,game):
 #   creat new data structure each tick
 #   keep track of live growth, and apply at the end
 
+
+
+# Iterate each cell
+def generate(game):
+    tick=[]
+    for line in game:
+        for cell in line:
+
+                count = countLiveNeigbours
+            
+                if (cell == 1) and (count == 2 or count == 3):
+                    tick[line][cell] = 1
+                    break
+                            
+                if cell == 1:
+                    
+                    break
+
+                if cell == 0 and count == 3:
+                    tick[line][cell] = 1
+                    break
+
+                tick[line][cell] = 0
+    return tick
+
 # game loop, sort-a
 printGol(game)
 line = 1; cell = 5; print ("(expect 2) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
 grow(game)
 printGol(game)
 
-# Iterate each cell
-for line in game:
-        for cell in line:
-            countLiveNeigbours
-            
+game = generate(game)
+printGol(game)
+
+
+
+
