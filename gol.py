@@ -3,7 +3,7 @@
 # Any dead cell with three live neighbours becomes a live cell.
 # All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-# global data
+# global game data
 game = [[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1]]
 
 def printGol(game):
@@ -13,16 +13,13 @@ def printGol(game):
         print("")
     print("")
 
-
 def extendLeft(game):
     for line in game:
             line.insert(0,0)
 
-
 def extendRight(game):
     for line in game:
             line.append(0)
-            
 
 def extendUp(game):
     line = []
@@ -36,23 +33,48 @@ def extendDown(game):
             line.append(0)
     game.append(line)
 
+# if the top, bottom, left or right row or column have a '1' in them, then exetend 
+# in that direction as live cells may grow into it. (a shrink function might be interesting too)
+def grow(game):
 
+    for c in game[0]:
+        if c == 1:
+            extendUp(game)
+            break
+    
+    for c in game[len(game)-1]:
+        if c == 1:
+            extendDown(game)
+            break
 
-# Iteragte each cell
-#for line in game:
-        #for cell in line:
-            #countLiveNeigbours
+    for c in game:
+        if c[0] == 1:
+            extendLeft(game)
+            break
 
+    for c in game:
+        if c[len(c) - 1 ] == 1:
+            extendRight(game)
+            break
+    for c in game[0]:
+        if c == 1:
+            extendUp(game)
+            break
+    
+    for c in game[len(game)-1]:
+        if c == 1:
+            extendDown(game)
+            break
 
-# game logic
-# iterate over each cell
-# apply rules as it is
-# apply changes - new data structure
+    for c in game:
+        if c[0] == 1:
+            extendLeft(game)
+            break
 
-# naive strategy
-#   single thread
-#   creat new data structure each tick
-#   keep track of live growth, and apply at the end
+    for c in game:
+        if c[len(c) - 1 ] == 1:
+            extendRight(game)
+            break
 
 def countLiveNeigbours(line,cell,game):
     count = 0
@@ -82,37 +104,15 @@ def countLiveNeigbours(line,cell,game):
 
     return count
 
-# if the top, bottom, left or right row or column have a '1' in them, then exetend 
-# in that direction. This is so that the extended column can be checked to see if 
-# the live cell grows into it. (a shrink function might be interesting too)
-def grow(game):
+# game logic
+# iterate over each cell
+# apply rules as it is
+# apply changes - new data structure
 
-    #look for 1's in the top line, and extend up if any found
-    for c in game[0]:
-        if c == 1:
-            extendUp(game)
-            break
-    
-    for c in game[len(game)-1]:
-        if c == 1:
-            extendDown(game)
-            break
-
-    for c in game:
-        if c[0] == 1:
-            extendLeft(game)
-            break
-
-    for c in game:
-        if c[len(c) - 1 ] == 1:
-            extendRight(game)
-            break
-
-
-
-    # looks for 1's in the bottom row, and extend down if found.
-    #for c in game[0]
-
+# naive strategy
+#   single thread
+#   creat new data structure each tick
+#   keep track of live growth, and apply at the end
 
 # game loop, sort-a
 printGol(game)
@@ -120,3 +120,8 @@ line = 1; cell = 5; print ("(expect 2) live neighbours of line ", line, " cell "
 grow(game)
 printGol(game)
 
+# Iterate each cell
+for line in game:
+        for cell in line:
+            countLiveNeigbours
+            
