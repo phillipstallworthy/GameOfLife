@@ -4,7 +4,7 @@
 # All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
 # global data
-game = [[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]]
+game = [[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1]]
 
 def printGol(game):
     for line in game:
@@ -13,37 +13,30 @@ def printGol(game):
         print("")
     print("")
 
-def extendLeft(game, growth):
-    for idx, line in enumerate(game):
-        if idx in growth:
-            line.insert(0,1)
-        else:
+
+def extendLeft(game):
+    for line in game:
             line.insert(0,0)
 
-def extentRight(game, growth):
-    for idx, line in enumerate(game):
-        if idx in growth:
-            line.append(1)
-        else:
-            line.append(0)
 
-def extendUp(game, growth):
+def extendRight(game):
+    for line in game:
+            line.append(0)
+            
+
+def extendUp(game):
     line = []
     for i in range(len(game[0])):
-        if i in growth:
-            line.append(1)
-        else:
             line.append(0)
     game.insert(0,line)
 
-def extendDown(game, growth):
+def extendDown(game):
     line = []
     for i in range(len(game[0])):
-        if i in growth:
-            line.append(1)
-        else:
             line.append(0)
     game.append(line)
+
+
 
 # Iteragte each cell
 #for line in game:
@@ -89,30 +82,41 @@ def countLiveNeigbours(line,cell,game):
 
     return count
 
+# if the top, bottom, left or right row or column have a '1' in them, then exetend 
+# in that direction. This is so that the extended column can be checked to see if 
+# the live cell grows into it. (a shrink function might be interesting too)
+def grow(game):
+
+    #look for 1's in the top line, and extend up if any found
+    for c in game[0]:
+        if c == 1:
+            extendUp(game)
+            break
+    
+    for c in game[len(game)-1]:
+        if c == 1:
+            extendDown(game)
+            break
+
+    for c in game:
+        if c[0] == 1:
+            extendLeft(game)
+            break
+
+    for c in game:
+        if c[len(c) - 1 ] == 1:
+            extendRight(game)
+            break
+
+
+
+    # looks for 1's in the bottom row, and extend down if found.
+    #for c in game[0]
+
+
 # game loop, sort-a
 printGol(game)
-extendLeft(game,[1,4])
-extendLeft(game,[1,4])
-extendLeft(game,[1,4])
-extendLeft(game,[1,4])
-printGol(game)
-extentRight(game,[0,3])
-extentRight(game,[0,3])
-extentRight(game,[0,3])
-extentRight(game,[0,3])
-printGol(game)
-extendUp(game,[2,5,6])
-extendUp(game,[2,5,6])
-extendUp(game,[2,5,6])
-extendUp(game,[2,5,6])
-printGol(game)
-extendDown(game,[2,5,6,11])
-extendDown(game,[2,5,6,11])
-extendDown(game,[2,5,6,11])
-extendDown(game,[2,5,6,11])
+line = 1; cell = 5; print ("(expect 2) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
+grow(game)
 printGol(game)
 
-line = 1; cell = 1; print ("(expect 3) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
-line = 0; cell = 0; print ("(expect 0) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
-line = 5; cell = 0; print ("(expect 2) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
-line = 10; cell = 6; print ("(expect 5) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
