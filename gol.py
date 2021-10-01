@@ -35,6 +35,7 @@ def extendDown(game):
 
 # if the top, bottom, left or right row or column have a '1' in them, then exetend 
 # in that direction as live cells may grow into it. (a shrink function might be interesting too)
+# TODO - cell should probably be "item"
 def grow(game):
 
     for c in game[0]:
@@ -76,30 +77,37 @@ def grow(game):
             extendRight(game)
             break
 
+# line - index
+# call - index
+# game - list of lists.
 def countLiveNeigbours(line,cell,game):
     count = 0
-    if game[line][cell + 1] == 1:
+    
+    lineLimit = len(game[0]) - 1
+    gameLimit = len(game) - 1
+
+    if cell < lineLimit and game[line][cell + 1] == 1:
         count += 1
 
-    if game[line][cell - 1] == 1:
+    if cell >= 0 and game[line][cell - 1] == 1:
         count += 1
 
-    if game[line -1][cell] == 1:
+    if line > 0 and game[line -1][cell] == 1:
         count += 1
 
-    if game[line + 1][cell] == 1:
+    if line < gameLimit and game[line + 1][cell] == 1:
         count += 1
 
-    if game[line - 1][cell - 1] == 1:
+    if line > 0 and cell >= 0 and game[line - 1][cell - 1] == 1:
         count += 1
 
-    if game[line - 1][cell + 1] == 1:
+    if line > 0 and cell < lineLimit and game[line - 1][cell + 1] == 1:
         count += 1
 
-    if game[line + 1][cell - 1] == 1:
+    if line < gameLimit and cell >= 0 and game[line + 1][cell - 1] == 1:
         count += 1
 
-    if game[line + 1][cell + 1] == 1:
+    if line < gameLimit and cell < lineLimit and game[line + 1][cell + 1] == 1:
         count += 1 
 
     return count
@@ -118,35 +126,49 @@ def countLiveNeigbours(line,cell,game):
 
 # Iterate each cell
 def generate(game):
-    tick=game
-    for idxl, line in enumerate(game):
-    #for line in game:
-        for idxc, cell in enumerate(line):
-        #for cell in line:
+    
+    emptyLine = [0] * len(game[0])
+    tick=[emptyLine] * len(game)
 
+    for idxl, line in enumerate(game):
+        for idxc, cell in enumerate(line):
             count = countLiveNeigbours(idxl,idxc,game)
-        
-            if (cell == 1) and (count == 2 or count == 3):
+
+            print ("line",idxl,"cell",idxc,"count",count)
+
+            if cell == 1 and count == 3:
+                print("alive")
+                tick[idxl][idxc] = 1
+                break
+
+            if cell == 1 and count == 2:
+                print("alive")
                 tick[idxl][idxc] = 1
                 break
 
             if cell == 0 and count == 3:
+                print("alive")
                 tick[idxl][idxc] = 1
                 break
-
+            
+            print("dead")
             tick[idxl][idxc] = 0
     return tick
 
 # game loop, sort-a
 printGol(game)
-line = 1; cell = 5; print ("(expect 2) live neighbours of line ", line, " cell ", cell, " = ", countLiveNeigbours(line,cell,game) )
+line = 1; cell = 5; print ("(expect 2) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+line = 1; cell = 4; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+print()
+
 grow(game)
 printGol(game)
 
-game = generate(game)
-printGol(game)
+line = 2; cell = 5; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+print()
 
-game[6][0] = 1
-printGol(game)
+tick = generate(game)
+printGol(tick)
+
 
 
