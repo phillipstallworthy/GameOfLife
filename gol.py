@@ -127,6 +127,7 @@ def countLiveNeigbours(line,cell,game):
 # Iterate each cell
 def generate(game):
     
+    #create the correct sized data structure.
     emptyLine = [0] * len(game[0])
     tick=[emptyLine] * len(game)
 
@@ -137,22 +138,30 @@ def generate(game):
             print ("line",idxl,"cell",idxc,"count",count)
 
             if cell == 1 and count == 3:
-                print("alive")
+                print("alive ******************* 3 live neighbours")
                 tick[idxl][idxc] = 1
-                break
+                printGol(tick)
+                continue
 
             if cell == 1 and count == 2:
-                print("alive")
+                print("alive ******************* 2 live neighbours")
                 tick[idxl][idxc] = 1
-                break
+                printGol(tick)
+                continue
 
             if cell == 0 and count == 3:
-                print("alive")
+                print("dead to alive 3 live neighbours")
                 tick[idxl][idxc] = 1
-                break
+                continue
             
-            print("dead")
-            tick[idxl][idxc] = 0
+            if cell == 1:
+                print ("Alive to dead +++++++++++++++++++")
+            else: 
+                print("stays dead")
+            
+            print("2")
+            tick[idxl][idxc] = 2
+            print("")
     return tick
 
 # game loop, sort-a
