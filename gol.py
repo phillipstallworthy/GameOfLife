@@ -3,6 +3,8 @@
 # Any dead cell with three live neighbours becomes a live cell.
 # All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
+import copy
+
 # global game data
 game = [[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1]]
 
@@ -126,58 +128,59 @@ def countLiveNeigbours(line,cell,game):
 
 # Iterate each cell
 def generate(game):
-    
-    #create the correct sized data structure.
-    emptyLine = [0] * len(game[0])
-    tick=[emptyLine] * len(game)
+
+    tick = copy.deepcopy(game)
 
     for idxl, line in enumerate(game):
         for idxc, cell in enumerate(line):
             count = countLiveNeigbours(idxl,idxc,game)
 
-            print ("line",idxl,"cell",idxc,"count",count)
+            #print ("line",idxl,"cell",idxc,"count",count)
 
             if cell == 1 and count == 3:
-                print("alive ******************* 3 live neighbours")
+                #print("alive ******************* 3 live neighbours")
                 tick[idxl][idxc] = 1
-                printGol(tick)
+                #printGol(tick)
                 continue
 
             if cell == 1 and count == 2:
-                print("alive ******************* 2 live neighbours")
+                #print("alive ******************* 2 live neighbours")
                 tick[idxl][idxc] = 1
-                printGol(tick)
+                #printGol(tick)
                 continue
 
             if cell == 0 and count == 3:
-                print("dead to alive 3 live neighbours")
+                #print("dead to alive 3 live neighbours")
                 tick[idxl][idxc] = 1
                 continue
             
-            if cell == 1:
-                print ("Alive to dead +++++++++++++++++++")
-            else: 
-                print("stays dead")
+            #if cell == 1:
+            #    print ("Alive to dead +++++++++++++++++++")
+            #else: 
+            #    print("stays dead")
             
-            print("2")
-            tick[idxl][idxc] = 2
-            print("")
+            #print("2")
+            tick[idxl][idxc] = 0
+            #print("")
     return tick
 
 # game loop, sort-a
-printGol(game)
-line = 1; cell = 5; print ("(expect 2) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
-line = 1; cell = 4; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
-print()
+#printGol(game)
+#line = 1; cell = 5; print ("(expect 2) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+#line = 1; cell = 4; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+#print()
 
 grow(game)
+#printGol(game)
+
+#line = 2; cell = 5; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+#print()
+
+game = generate(game)
 printGol(game)
 
-line = 2; cell = 5; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
-print()
+game = generate(game)
+printGol(game)
 
-tick = generate(game)
-printGol(tick)
-
-
-
+game = generate(game)
+printGol(game)
