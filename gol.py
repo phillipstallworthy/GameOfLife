@@ -40,44 +40,47 @@ def extendDown(game):
 # TODO - cell should probably be "item"
 def grow(game):
 
-    for c in game[0]:
+    newGame = copy.deepcopy(game) # also deep copy in generate..combine functions?
+
+    for c in newGame[0]:
         if c == 1:
-            extendUp(game)
+            extendUp(newGame)
             break
     
-    for c in game[len(game)-1]:
+    for c in newGame[len(newGame)-1]:
         if c == 1:
-            extendDown(game)
+            extendDown(newGame)
             break
 
-    for c in game:
+    for c in newGame:
         if c[0] == 1:
-            extendLeft(game)
+            extendLeft(newGame)
             break
 
-    for c in game:
+    for c in newGame:
         if c[len(c) - 1 ] == 1:
-            extendRight(game)
+            extendRight(newGame)
             break
-    for c in game[0]:
+    for c in newGame[0]:
         if c == 1:
-            extendUp(game)
+            extendUp(newGame)
             break
     
-    for c in game[len(game)-1]:
+    for c in newGame[len(newGame)-1]:
         if c == 1:
-            extendDown(game)
+            extendDown(newGame)
             break
 
-    for c in game:
+    for c in newGame:
         if c[0] == 1:
-            extendLeft(game)
+            extendLeft(newGame)
             break
 
-    for c in game:
+    for c in newGame:
         if c[len(c) - 1 ] == 1:
-            extendRight(game)
+            extendRight(newGame)
             break
+    return newGame
 
 # line - index
 # call - index
@@ -130,38 +133,24 @@ def countLiveNeigbours(line,cell,game):
 def generate(game):
 
     tick = copy.deepcopy(game)
-
-    for idxl, line in enumerate(game):
+    
+    for idxl, line in enumerate(tick):
         for idxc, cell in enumerate(line):
-            count = countLiveNeigbours(idxl,idxc,game)
-
-            #print ("line",idxl,"cell",idxc,"count",count)
+            count = countLiveNeigbours(idxl,idxc,tick)
 
             if cell == 1 and count == 3:
-                #print("alive ******************* 3 live neighbours")
                 tick[idxl][idxc] = 1
-                #printGol(tick)
                 continue
 
             if cell == 1 and count == 2:
-                #print("alive ******************* 2 live neighbours")
                 tick[idxl][idxc] = 1
-                #printGol(tick)
                 continue
 
             if cell == 0 and count == 3:
-                #print("dead to alive 3 live neighbours")
                 tick[idxl][idxc] = 1
                 continue
             
-            #if cell == 1:
-            #    print ("Alive to dead +++++++++++++++++++")
-            #else: 
-            #    print("stays dead")
-            
-            #print("2")
             tick[idxl][idxc] = 0
-            #print("")
     return tick
 
 # game loop, sort-a
@@ -170,17 +159,11 @@ def generate(game):
 #line = 1; cell = 4; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
 #print()
 
-grow(game)
-#printGol(game)
-
-#line = 2; cell = 5; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
-#print()
-
-game = generate(game)
 printGol(game)
 
-game = generate(game)
-printGol(game)
+ticks = 10
 
-game = generate(game)
-printGol(game)
+for i in range(ticks):
+    game = grow(game)
+    game = generate(game)
+    printGol(game)
