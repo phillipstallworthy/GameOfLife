@@ -5,8 +5,16 @@
 
 import copy
 
-# global game data
-game = [[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1]]
+# Blinking cross.
+#game = [[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1]]
+
+#Glider
+#001
+#101
+#011
+game = [[0,0,1,0,0,0,0,0,0,0],[1,0,1,0,0,0,0,0,0,0],[0,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]]
+
+
 
 def printGol(game):
     for line in game:
@@ -40,47 +48,48 @@ def extendDown(game):
 # TODO - cell should probably be "item"
 def grow(game):
 
-    newGame = copy.deepcopy(game) # also deep copy in generate..combine functions?
+    grow = copy.deepcopy(game)
 
-    for c in newGame[0]:
+    for c in grow[0]:
         if c == 1:
-            extendUp(newGame)
+            extendUp(grow)
             break
     
-    for c in newGame[len(newGame)-1]:
+    for c in grow[len(grow)-1]:
         if c == 1:
-            extendDown(newGame)
+            extendDown(grow)
             break
 
-    for c in newGame:
+    for c in grow:
         if c[0] == 1:
-            extendLeft(newGame)
+            extendLeft(grow)
             break
 
-    for c in newGame:
+    for c in grow:
         if c[len(c) - 1 ] == 1:
-            extendRight(newGame)
+            extendRight(grow)
             break
-    for c in newGame[0]:
+    for c in grow[0]:
         if c == 1:
-            extendUp(newGame)
+            extendUp(grow)
             break
     
-    for c in newGame[len(newGame)-1]:
+    for c in grow[len(grow)-1]:
         if c == 1:
-            extendDown(newGame)
+            extendDown(grow)
             break
 
-    for c in newGame:
+    for c in grow:
         if c[0] == 1:
-            extendLeft(newGame)
+            extendLeft(grow)
             break
 
-    for c in newGame:
+    for c in grow:
         if c[len(c) - 1 ] == 1:
-            extendRight(newGame)
+            extendRight(grow)
             break
-    return newGame
+
+    return grow
 
 # line - index
 # call - index
@@ -133,10 +142,10 @@ def countLiveNeigbours(line,cell,game):
 def generate(game):
 
     tick = copy.deepcopy(game)
-    
-    for idxl, line in enumerate(tick):
+
+    for idxl, line in enumerate(game):
         for idxc, cell in enumerate(line):
-            count = countLiveNeigbours(idxl,idxc,tick)
+            count = countLiveNeigbours(idxl,idxc,game)
 
             if cell == 1 and count == 3:
                 tick[idxl][idxc] = 1
@@ -160,10 +169,15 @@ def generate(game):
 #print()
 
 printGol(game)
+game = grow(game)
+#printGol(game)
 
-ticks = 10
+#line = 2; cell = 5; print ("(expect 1) Live neighbours of line",line, "cell", cell, " = ", countLiveNeigbours(line,cell,game) )
+#print()
 
-for i in range(ticks):
+iterations = 300
+
+for i in range(iterations):
     game = grow(game)
     game = generate(game)
     printGol(game)
